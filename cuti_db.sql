@@ -85,70 +85,10 @@ INSERT INTO `cuti` (`id_cuti`, `tanggal_mulai`, `tanggal_selesai`, `tanggal_peng
 -- --------------------------------------------------------
 
 
---
--- Stand-in structure for view `pegawai_cuti`
--- (See below for the actual view)
---
-CREATE TABLE `pegawai_cuti` (
-`nip` varchar(50)
-,`nama` varchar(100)
-,`jabatan` varchar(200)
-,`golongan` varchar(50)
-,`unit_kerja` varchar(200)
-,`status` varchar(50)
-,`password` varchar(50)
-,`id_cuti` varchar(22)
-,`tanggal_mulai` date
-,`tanggal_selesai` date
-,`tanggal_pengajuan` date
-,`jenis_cuti` varchar(20)
-,`tempat_cuti` varchar(20)
-,`alamat_nohp` text
-,`keperluan` text
-,`lama_cuti` int(11)
-,`id_pegawai` varchar(50)
-,`id_atasan` varchar(50)
-,`status_cuti` int(11)
-,`dokumen_cuti` text
-);
 
 -- --------------------------------------------------------
 
---
--- Stand-in structure for view `pegawai_cuti2`
--- (See below for the actual view)
---
-CREATE TABLE `pegawai_cuti2` (
-`id_cuti` varchar(22)
-,`nip` varchar(50)
-,`nama` varchar(100)
-,`jabatan` varchar(200)
-,`tanggal_mulai` date
-,`tanggal_selesai` date
-,`tanggal_pengajuan` date
-,`lama_cuti` int(11)
-,`tempat_cuti` varchar(20)
-,`jenis_cuti` varchar(20)
-,`status_cuti` varchar(16)
-,`id_atasan` varchar(50)
-,`id_pegawai` varchar(50)
-);
-
--- --------------------------------------------------------
-
---
--- Stand-in structure for view `perhitungan_cuti`
--- (See below for the actual view)
---
-CREATE TABLE `perhitungan_cuti` (
-`id_pegawai` varchar(50)
-,`j_tahun_mulai` double
-,`j_tahun_selesai` double
-,`tahun_mulai` int(4)
-,`tahun_selesai` int(4)
-);
-
--- --------------------------------------------------------
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `cuti_setuju`  AS  select `cuti`.`id_cuti` AS `id_cuti`,`cuti`.`tanggal_mulai` AS `tanggal_mulai`,`cuti`.`tanggal_selesai` AS `tanggal_selesai`,`cuti`.`tanggal_pengajuan` AS `tanggal_pengajuan`,`cuti`.`jenis_cuti` AS `jenis_cuti`,`cuti`.`tempat_cuti` AS `tempat_cuti`,`cuti`.`alamat_nohp` AS `alamat_nohp`,`cuti`.`keperluan` AS `keperluan`,`cuti`.`lama_cuti` AS `lama_cuti`,`cuti`.`id_pegawai` AS `id_pegawai`,`cuti`.`id_atasan` AS `id_atasan`,`cuti`.`status_cuti` AS `status_cuti`,`cuti`.`dokumen_cuti` AS `dokumen_cuti` from `cuti` where (`cuti`.`status_cuti` = '2') ;
 
 --
 -- Structure for view `pegawai_cuti`
@@ -173,7 +113,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `perhitungan_cuti`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `perhitungan_cuti`  AS  select `cuti`.`id_pegawai` AS `id_pegawai`,(case when (extract(year from `cuti`.`tanggal_mulai`) < extract(year from `cuti`.`tanggal_selesai`)) then (sum(`cuti`.`lama_cuti`) - ((5 * ((to_days(`cuti`.`tanggal_selesai`) - to_days(concat(extract(year from `cuti`.`tanggal_mulai`),'-12-31'))) DIV 7)) + substr('0123444401233334012222340111123400012345001234550',(((7 * weekday(concat(extract(year from `cuti`.`tanggal_mulai`),'-12-31'))) + weekday(`cuti`.`tanggal_selesai`)) + 1),1))) else (sum(`cuti`.`lama_cuti`) / 2) end) AS `j_tahun_mulai`,(case when (extract(year from `cuti`.`tanggal_mulai`) < extract(year from `cuti`.`tanggal_selesai`)) then ((5 * ((to_days(`cuti`.`tanggal_selesai`) - to_days(concat(extract(year from `cuti`.`tanggal_mulai`),'-12-31'))) DIV 7)) + substr('0123444401233334012222340111123400012345001234550',(((7 * weekday(concat(extract(year from `cuti`.`tanggal_mulai`),'-12-31'))) + weekday(`cuti`.`tanggal_selesai`)) + 1),1)) else (sum(`cuti`.`lama_cuti`) / 2) end) AS `j_tahun_selesai`,extract(year from `cuti`.`tanggal_mulai`) AS `tahun_mulai`,extract(year from `cuti`.`tanggal_selesai`) AS `tahun_selesai` from `cuti` group by `cuti`.`id_pegawai`,extract(year from `cuti`.`tanggal_mulai`),extract(year from `cuti`.`tanggal_selesai`) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `perhitungan_cuti`  AS  select `cuti_db`.`cuti_setuju`.`id_pegawai` AS `id_pegawai`,(case when (extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`) < extract(year from `cuti_db`.`cuti_setuju`.`tanggal_selesai`)) then (sum(`cuti_db`.`cuti_setuju`.`lama_cuti`) - ((5 * ((to_days(`cuti_db`.`cuti_setuju`.`tanggal_selesai`) - to_days(concat(extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`),'-12-31'))) DIV 7)) + substr('0123444401233334012222340111123400012345001234550',(((7 * weekday(concat(extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`),'-12-31'))) + weekday(`cuti_db`.`cuti_setuju`.`tanggal_selesai`)) + 1),1))) else (sum(`cuti_db`.`cuti_setuju`.`lama_cuti`) / 2) end) AS `j_tahun_mulai`,(case when (extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`) < extract(year from `cuti_db`.`cuti_setuju`.`tanggal_selesai`)) then ((5 * ((to_days(`cuti_db`.`cuti_setuju`.`tanggal_selesai`) - to_days(concat(extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`),'-12-31'))) DIV 7)) + substr('0123444401233334012222340111123400012345001234550',(((7 * weekday(concat(extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`),'-12-31'))) + weekday(`cuti_db`.`cuti_setuju`.`tanggal_selesai`)) + 1),1)) else (sum(`cuti_db`.`cuti_setuju`.`lama_cuti`) / 2) end) AS `j_tahun_selesai`,extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`) AS `tahun_mulai`,extract(year from `cuti_db`.`cuti_setuju`.`tanggal_selesai`) AS `tahun_selesai` from `cuti_db`.`cuti_setuju` group by `cuti_db`.`cuti_setuju`.`id_pegawai`,extract(year from `cuti_db`.`cuti_setuju`.`tanggal_mulai`),extract(year from `cuti_db`.`cuti_setuju`.`tanggal_selesai`) ;
 
 --
 -- Indexes for dumped tables
