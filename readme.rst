@@ -16,6 +16,6 @@ Langkah-langkah Penggunaan:
 - Buka Jalankan Module Apache dan Mysql yang ada pada XAMPP
 - Buat database baru dengan nama cuti_db
 - Pindah Ke Direktori xampp/htdocs
-- Clone: __https://github.com/prasetyanurangga/aplikasi_cuti_ci.git__
-- Import file __cuti_db.sql__ ke database cuti_db yang telah dibuat tadi
-- Buka browser, kemudian buka __localhost__
+- Clone: https://github.com/prasetyanurangga/aplikasi_cuti_ci.git
+- Import file cuti_db.sql ke database cuti_db yang telah dibuat tadi
+- Buka browser, kemudian buka localhost
