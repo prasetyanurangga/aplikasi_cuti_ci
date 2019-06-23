@@ -68,7 +68,7 @@ class Cuti extends CI_Controller {
 	public function json_jml_cuti()
 	{
 		if ($this->session->userdata('status') == "atasan") {
-			$nip = '198204042008012035';
+			$nip = $this->session->userdata('nip');
 			$this->load->model('ambil_data');
 			$datas = $this->ambil_data->m_sisa_cuti($nip);
 			foreach ($datas as $key => $value) {
@@ -452,46 +452,4 @@ $pdf->Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
 	}
 
 
-	/*public function data_siswa()
-	{
-		$this->load->model('kirim_data');
-		$data["siswa"] = $this->kirim_data->ambil_siswa();
-		$this->load->view('view_data_siswa',$data);
-	}
-	public function kirim_input()
-	{
-		if ($this->input->post("kirim") == "Simpan")
-		{
-		$this->load->model('kirim_data');
-		$no = $this->input->post("no_induk");
-		$nama = $this->input->post("nama");
-		$kelas = $this->input->post("kelas");
-		$indo = $this->input->post("n_indo");
-		$ingg = $this->input->post("n_ingg");
-		$mtk = $this->input->post("n_mtk");
-		$prod = $this->input->post("n_prod");
-		$data = array(
-			'no_ind_siswa' => $no,
-			'nama_siswa' => $nama,
-			'kelas' => $kelas,
-			'nilai_bindo' => $indo,
-			'nilai_bingg' => $ingg,
-			'nilai_mtk' => $mtk,
-			'nilai_prod' => $prod
-		);
-		try{
-		$this->kirim_data->kirim_siswa($data);
-echo "<script>alert('Berhasil Mengupload');window.location.href='".base_url()."'</script>";
-}
-catch(Exception $e)
-{
-echo "<script>alert('Gagal Mengupload');window.location.href='".base_url()."'</script>";
-}
-}
-else
-{
-echo "<script>window.location.href='".base_url()."'</script>";
-}
-}
-*/
 }
